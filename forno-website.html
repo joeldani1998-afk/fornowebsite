@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FORNO — Pizza &amp; Burger House</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Oswald:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    :root{--bg:#0A0300;--card:#1A0700;--card-hov:#271000;--border:#361200;--red:#C01818;--red2:#DE1E1E;--fire:#FF6200;--cream:#F3DFC4;--muted:#9A7655;--gold:#D09E2C}
+    body{background:var(--bg);color:var(--cream);font-family:'Inter',sans-serif;line-height:1.6}
+    nav{position:sticky;top:0;z-index:100;background:rgba(10,3,0,.97);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
+    .nav-inner{max-width:1100px;margin:0 auto;padding:0 1.5rem;height:56px;display:flex;align-items:center;gap:1.25rem}
+    .nav-brand{font-family:'Playfair Display',serif;font-weight:900;font-size:1.3rem;color:var(--cream);text-decoration:none;flex-shrink:0}
+    .nav-brand em{color:var(--red);font-style:normal}
+    .nav-links{display:flex;gap:.1rem;overflow-x:auto;scrollbar-width:none;flex:1}
+    .nav-links::-webkit-scrollbar{display:none}
+    .nav-links a{font-family:'Oswald',sans-serif;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:.28rem .55rem;border-radius:3px;white-space:nowrap;transition:color .15s,background .15s}
+    .nav-links a:hover{color:var(--cream);background:var(--card)}
+    .nav-call{display:flex;align-items:center;gap:.35rem;background:var(--red);color:var(--cream);font-family:'Oswald',sans-serif;font-size:.78rem;letter-spacing:.07em;padding:.36rem .8rem;border-radius:3px;text-decoration:none;flex-shrink:0;transition:background .15s}
+    .nav-call:hover{background:var(--red2)}
+    .ham{display:none;background:none;border:none;cursor:pointer;padding:.4rem;flex-direction:column;gap:5px;margin-left:auto}
+    .ham span{display:block;width:20px;height:2px;background:var(--cream);border-radius:2px}
+    .mob-nav{display:none;position:fixed;top:56px;left:0;right:0;background:rgba(10,3,0,.98);border-bottom:1px solid var(--border);padding:1rem 1.5rem;z-index:99;flex-wrap:wrap;gap:.45rem}
+    .mob-nav.open{display:flex}
+    .mob-nav a{font-family:'Oswald',sans-serif;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:.38rem .75rem;border:1px solid var(--border);border-radius:4px;transition:color .15s,background .15s}
+    .mob-nav a.call-link{color:var(--gold);border-color:rgba(208,158,44,.4)}
+    .hero{position:relative;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 1.5rem 6rem;overflow:hidden}
+    .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 55% 45% at 50% 60%,rgba(130,28,0,.5) 0%,transparent 70%),radial-gradient(ellipse 90% 60% at 50% 100%,rgba(60,10,0,.65) 0%,transparent 60%),var(--bg)}
+    .hero-bg::after{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px;opacity:.025;pointer-events:none}
+    .flame-wrap{position:relative;z-index:2;margin-bottom:1.25rem}
+    .flame-svg{width:min(240px,52vw);height:auto}
+    .fl-o{animation:flo 2.4s ease-in-out infinite alternate;transform-origin:50% 90%}
+    .fl-m{animation:flm 1.9s ease-in-out infinite alternate;transform-origin:50% 90%}
+    .fl-i{animation:fli 1.5s ease-in-out infinite alternate;transform-origin:50% 90%}
+    @keyframes flo{0%{transform:scaleX(1) scaleY(1)}45%{transform:scaleX(.93) scaleY(1.07)}100%{transform:scaleX(1.05) scaleY(.96)}}
+    @keyframes flm{0%{transform:scaleX(1) scaleY(1)}40%{transform:scaleX(1.07) scaleY(.95)}100%{transform:scaleX(.93) scaleY(1.09)}}
+    @keyframes fli{0%{transform:scaleX(1) scaleY(1)}50%{transform:scaleX(.9) scaleY(1.1)}100%{transform:scaleX(1.06) scaleY(.94)}}
+    .sp{animation:sp 2.2s ease-in-out infinite}
+    .sp:nth-child(2){animation-delay:.5s}.sp:nth-child(3){animation-delay:.9s}
+    @keyframes sp{0%,100%{opacity:0;transform:translateY(0)}50%{opacity:1;transform:translateY(-10px)}}
+    .hero-body{position:relative;z-index:2;text-align:center}
+    .hero-eye{font-family:'Oswald',sans-serif;font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;color:var(--red);margin-bottom:.4rem}
+    .hero-name{font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(5.5rem,20vw,11rem);line-height:.85;color:var(--cream);letter-spacing:-.025em;text-shadow:0 0 80px rgba(192,24,24,.3)}
+    .hero-sub{font-family:'Oswald',sans-serif;font-size:clamp(.75rem,2vw,.98rem);letter-spacing:.35em;text-transform:uppercase;color:var(--muted);margin:.7rem 0}
+    .hero-tag{font-style:italic;font-size:.82rem;color:var(--muted);margin-bottom:2rem}
+    .hero-cta{display:inline-flex;align-items:center;gap:.5rem;background:var(--red);color:var(--cream);font-family:'Oswald',sans-serif;font-size:.95rem;letter-spacing:.1em;text-transform:uppercase;padding:.7rem 1.8rem;border-radius:3px;text-decoration:none;transition:background .15s,transform .15s}
+    .hero-cta:hover{background:var(--red2);transform:translateY(-2px)}
+    .hero-cta .live{width:7px;height:7px;background:var(--fire);border-radius:50%;animation:bl 1.2s ease infinite}
+    @keyframes bl{0%,100%{opacity:1}50%{opacity:.25}}
+    .scroll-hint{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:.5rem}
+    .sh-lbl{font-family:'Oswald',sans-serif;font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+    .sh-line{width:1px;height:36px;background:linear-gradient(to bottom,var(--muted),transparent);animation:shl 2.6s ease infinite}
+    @keyframes shl{0%{transform:scaleY(0);transform-origin:top;opacity:0}30%{opacity:1}60%{transform:scaleY(1);transform-origin:top}61%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom;opacity:0}}
+    .content{max-width:1100px;margin:0 auto;padding:0 1.5rem 6rem}
+    .msec{padding-top:5rem;opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease}
+    .msec.vis{opacity:1;transform:none}
+    [id]{scroll-margin-top:68px}
+    .sec-head{display:flex;align-items:flex-end;gap:1.25rem;margin-bottom:1.75rem}
+    .sec-lbl{font-family:'Oswald',sans-serif;font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;color:var(--red);margin-bottom:.2rem}
+    .sec-head h2{font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(1.9rem,5vw,3rem);color:var(--cream);line-height:1}
+    .sec-head h2 em{color:var(--red);font-style:normal}
+    .sec-rule{flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);margin-bottom:.4rem}
+    /* section banner (hot drinks) */
+    .sec-banner{width:100%;border-radius:6px;overflow:hidden;margin-bottom:1.5rem;aspect-ratio:21/6;background:var(--card)}
+    .sec-banner img{width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.78)}
+    .grid-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:6px;overflow:hidden}
+    .grid-compact{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:6px;overflow:hidden}
+    .card{background:var(--card);padding:1.15rem 1.35rem;display:flex;flex-direction:column;gap:.32rem;position:relative;transition:background .2s}
+    .card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--red);transform:scaleY(0);transform-origin:bottom;transition:transform .25s ease}
+    .card:hover{background:var(--card-hov)}.card:hover::before{transform:scaleY(1)}
+    .card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem}
+    .card-name{font-family:'Oswald',sans-serif;font-size:.97rem;font-weight:500;letter-spacing:.02em;color:var(--cream);line-height:1.3}
+    .card-price{font-family:'Playfair Display',serif;font-size:.98rem;font-weight:700;color:var(--gold);flex-shrink:0}
+    .card-desc{font-size:.74rem;color:var(--muted);line-height:1.55}
+    .grid-compact .card{flex-direction:row;align-items:center;padding:.74rem 1.05rem;gap:0}
+    .grid-compact .card-name{font-size:.84rem;flex:1}
+    .grid-compact .card-price{font-size:.88rem}
+    /* IMAGE CARDS */
+    .card.has-img{padding:0;overflow:hidden}
+    .card-img-wrap{overflow:hidden;position:relative;aspect-ratio:16/9;background:var(--card-hov)}
+    .card-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease;filter:brightness(.9)}
+    .card.has-img:hover .card-img{transform:scale(1.06);filter:brightness(1)}
+    .card-img-wrap::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(10,3,0,.6) 100%);pointer-events:none}
+    .card.has-img .card-body{padding:1rem 1.35rem 1.15rem;display:flex;flex-direction:column;gap:.3rem}
+    .img-badge{position:absolute;top:.6rem;right:.6rem;background:var(--red);color:var(--cream);font-family:'Oswald',sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;padding:.18rem .48rem;border-radius:2px;z-index:2}
+    .deliver{margin-top:5rem;background:linear-gradient(135deg,#1A0700 0%,#2B0C00 100%);border:1px solid var(--border);border-radius:8px;padding:clamp(2.5rem,7vw,4.5rem) 2rem;text-align:center;position:relative;overflow:hidden}
+    .deliver::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 55% at 50% 100%,rgba(192,24,24,.18),transparent);pointer-events:none}
+    .deliver-eye{font-family:'Oswald',sans-serif;font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;color:var(--red);margin-bottom:.5rem}
+    .deliver-h{font-family:'Playfair Display',serif;font-size:clamp(2rem,7vw,4rem);font-weight:900;color:var(--cream)}
+    .deliver-num{font-family:'Oswald',sans-serif;font-size:clamp(1.6rem,6vw,2.8rem);font-weight:600;color:var(--gold);letter-spacing:.1em;margin:.4rem 0 2rem}
+    .pills-wrap{display:flex;justify-content:center;flex-wrap:wrap;gap:.6rem}
+    .pill{display:flex;align-items:center;gap:.4rem;background:var(--card);border:1px solid var(--border);border-radius:100px;padding:.36rem .95rem;font-family:'Oswald',sans-serif;font-size:.76rem;color:var(--cream);letter-spacing:.04em}
+    .pill .p{color:var(--gold)}
+    footer{border-top:1px solid var(--border);padding:2.5rem 1.5rem;text-align:center}
+    .foot-logo{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;color:var(--cream);line-height:1}
+    .foot-logo em{color:var(--red);font-style:normal}
+    .foot-sub{font-family:'Oswald',sans-serif;font-size:.7rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);margin:.4rem 0 .2rem}
+    .foot-tag{font-style:italic;font-size:.78rem;color:var(--muted)}
+    .foot-copy{font-size:.66rem;color:var(--border);margin-top:1.5rem}
+    #btt{position:fixed;bottom:1.5rem;left:1.5rem;z-index:200;background:var(--card);border:1px solid var(--border);color:var(--cream);width:38px;height:38px;border-radius:4px;cursor:pointer;font-size:.9rem;display:none;align-items:center;justify-content:center;transition:background .15s}
+    #btt.show{display:flex}#btt:hover{background:var(--card-hov)}
+    /* EDIT PANEL */
+    #edit-fab{position:fixed;bottom:1.5rem;right:1.5rem;z-index:200;background:var(--red);color:#fff;border:none;padding:.6rem 1.1rem;border-radius:4px;cursor:pointer;font-family:'Oswald',sans-serif;font-size:.82rem;letter-spacing:.09em;text-transform:uppercase;box-shadow:0 4px 20px rgba(192,24,24,.5);display:flex;align-items:center;gap:.4rem;transition:background .15s,transform .15s}
+    #edit-fab:hover{background:var(--red2);transform:translateY(-2px)}
+    #ep-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1000;backdrop-filter:blur(3px)}
+    #ep-overlay.open{display:block}
+    #ep-panel{position:fixed;right:0;top:0;bottom:0;width:400px;max-width:100vw;background:#F7F4F0;z-index:1001;transform:translateX(110%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;box-shadow:-4px 0 40px rgba(0,0,0,.45)}
+    #ep-panel.open{transform:translateX(0)}
+    .ep-head{background:#120500;color:#F3DFC4;padding:1.1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+    .ep-head h3{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:900}
+    .ep-head h3 em{color:#C01818;font-style:normal}
+    .ep-head p{font-size:.67rem;color:#9A7655;margin-top:.15rem}
+    .ep-x{background:none;border:1px solid rgba(255,255,255,.2);color:#F3DFC4;width:30px;height:30px;border-radius:4px;cursor:pointer;font-size:.95rem;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0}
+    .ep-x:hover{background:rgba(255,255,255,.12)}
+    .ep-save{background:#C01818;color:#fff;border:none;padding:.88rem;font-family:'Oswald',sans-serif;font-size:.85rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;flex-shrink:0;transition:background .15s}
+    .ep-save:hover{background:#DE1E1E}
+    .ep-body{flex:1;overflow-y:auto;padding:1rem;scrollbar-width:thin;scrollbar-color:#D0C8C0 transparent}
+    .ep-body::-webkit-scrollbar{width:5px}
+    .ep-body::-webkit-scrollbar-thumb{background:#D0C8C0;border-radius:3px}
+    .fg{background:#fff;border:1px solid #E5DDD5;border-radius:6px;padding:.9rem;margin-bottom:.7rem}
+    .fg-label{font-size:.63rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#B0A898;margin-bottom:.65rem}
+    .ef{margin-bottom:.48rem}
+    .ef:last-child{margin-bottom:0}
+    .ef label{display:block;font-size:.63rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#BAB2AA;margin-bottom:.2rem}
+    .ef input,.ef textarea{width:100%;border:1.5px solid #E0D8D0;border-radius:4px;padding:.42rem .65rem;font-size:.88rem;font-family:'Inter',sans-serif;color:#2A2320;background:#FDFBF9;transition:border-color .15s,box-shadow .15s;resize:none}
+    .ef input:focus,.ef textarea:focus{outline:none;border-color:#C01818;box-shadow:0 0 0 3px rgba(192,24,24,.1)}
+    .price-row{display:flex;align-items:center;gap:.4rem}
+    .price-row input{flex:1}
+    .etb-tag{font-size:.76rem;color:#B0A898;font-family:'Oswald',sans-serif;flex-shrink:0}
+    .ep-sec{background:#fff;border:1px solid #E5DDD5;border-radius:6px;margin-bottom:.55rem;overflow:hidden}
+    .ep-sec-hd{width:100%;background:none;border:none;padding:.78rem 1rem;display:flex;align-items:center;justify-content:space-between;cursor:pointer;text-align:left;transition:background .15s}
+    .ep-sec-hd:hover{background:#FAF6F2}
+    .ep-sec-name{font-family:'Oswald',sans-serif;font-size:.84rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#2A2320}
+    .ep-sec-meta{display:flex;align-items:center;gap:.45rem}
+    .ep-sec-ct{font-size:.67rem;color:#B0A898;background:#EDE8E3;padding:.12rem .45rem;border-radius:10px}
+    .ep-chev{font-size:.6rem;color:#B0A898;transition:transform .2s}
+    .ep-sec.open .ep-chev{transform:rotate(180deg)}
+    .ep-sec-body{display:none;padding:0 .75rem .75rem;border-top:1px solid #EDE8E3}
+    .ep-sec.open .ep-sec-body{display:block}
+    .ep-item{background:#FAF6F2;border:1px solid #E5DDD5;border-radius:5px;padding:.75rem;margin-top:.55rem}
+    .ep-item-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:.52rem}
+    .ep-item-n{font-size:.6rem;font-weight:700;color:#C8C0B8;letter-spacing:.06em;text-transform:uppercase}
+    .ep-del{background:none;border:1px solid #E0D8D0;color:#CC3333;width:25px;height:25px;border-radius:4px;cursor:pointer;font-size:.75rem;display:flex;align-items:center;justify-content:center;transition:background .15s,border-color .15s}
+    .ep-del:hover{background:#FFF0F0;border-color:#CC3333}
+    .ep-add{width:100%;background:none;border:1.5px dashed #C8BFB5;border-radius:5px;padding:.55rem;margin-top:.55rem;cursor:pointer;font-family:'Oswald',sans-serif;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:#B0A898;transition:border-color .15s,color .15s,background .15s}
+    .ep-add:hover{border-color:#C01818;color:#C01818;background:#FFF8F8}
+    .ep-help{font-size:.68rem;color:#B0A898;text-align:center;padding:.65rem 1rem;border-top:1px solid #E5DDD5;flex-shrink:0;line-height:1.55}
+    .img-note{font-size:.62rem;color:#B0A898;margin-top:.22rem;line-height:1.45;font-style:italic}
+    #ep-toast{position:fixed;bottom:5rem;right:1.5rem;background:#120500;color:#F3DFC4;padding:.65rem 1.15rem;border-radius:4px;font-family:'Oswald',sans-serif;font-size:.78rem;letter-spacing:.06em;z-index:1200;opacity:0;transform:translateY(8px);transition:opacity .25s,transform .25s;pointer-events:none}
+    #ep-toast.show{opacity:1;transform:none}
+    @media(max-width:640px){.nav-links,.nav-call{display:none}.ham{display:flex}.grid-cards{grid-template-columns:1fr}.grid-compact{grid-template-columns:1fr 1fr}#ep-panel{width:100vw}}
+    @media(prefers-reduced-motion:reduce){.fl-o,.fl-m,.fl-i,.sp,.live,.sh-line{animation:none}.msec{opacity:1;transform:none}}
+  </style>
+</head>
+<body>
+<div id="site-root"></div>
+<button id="edit-fab" onclick="openEP()">&#9998;&#65039; Edit Menu</button>
+<div id="ep-overlay" onclick="closeEP()"></div>
+<div id="ep-panel">
+  <div class="ep-head">
+    <div><h3>FORNO<em>.</em> Menu Editor</h3><p>Edit names, prices, descriptions &amp; photo URLs</p></div>
+    <button class="ep-x" onclick="closeEP()">&#10005;</button>
+  </div>
+  <button class="ep-save" onclick="saveDownload()">&#128190; Save &amp; Download Website</button>
+  <div class="ep-body" id="ep-body"></div>
+  <div class="ep-help">After downloading, replace your old forno-website.html with the new file.</div>
+</div>
+<div id="ep-toast">&#10003; Your updated website is downloading...</div>
+<button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8593;</button>
+<script>
+// %%FORNO_DATA_START%%
+let MENU = {
+  phone:"0963203803",
+  sections:[
+    {
+      id:"pizza",eyebrow:"Wood-Fired",title:"Pizza",type:"cards",badge:"&#127829; Wood-Fired",
+      items:[
+        {name:"Special FORNO Pizza",desc:"Chicken, Mozzarella, Beef, Mushroom, Olive oil, Pepperoni, Egg, Tuna, Black pepper",price:800,img:"https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80"},
+        {name:"Margharita Pizza",desc:"Fresh Tomato sauce, Mozzarella, Tosign, Black pepper",price:600,img:"https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=800&q=80"},
+        {name:"Beef Pizza",desc:"Fresh Tomato sauce, Mozzarella, Beef, Tosign, Black pepper",price:700,img:"https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?auto=format&fit=crop&w=800&q=80"},
+        {name:"Mushroom Pizza",desc:"Fresh Tomato sauce, Mushroom, Mozzarella, Tosign, Black pepper",price:600,img:"https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=800&q=80"},
+        {name:"Four Season Pizza",desc:"Fresh Tomato sauce, Beef, Mozzarella, Mushrooms, Olive oil, Tosign, Black pepper",price:650,img:"https://images.unsplash.com/photo-1613564834361-9436948817d1?auto=format&fit=crop&w=800&q=80"}
+      ]
+    },
+    {
+      id:"burger",eyebrow:"Stacked & Grilled",title:"Burger",type:"cards",badge:"&#127828; Grilled Fresh",
+      items:[
+        {name:"Chicken Burger",desc:"Chicken, Provoloni, Cheese, Tomato, Lettuce, Onion, Mayonnaise",price:650,img:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80"},
+        {name:"Special FORNO Burger",desc:"Beef, Meat, Tomato, Lettuce, Onion, Cheese, Mayonnaise",price:700,img:"https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=800&q=80"},
+        {name:"Beef Burger",desc:"Beef, Meat, Lettuce, Tomato, Mayonnaise, Onion",price:500,img:"https://images.unsplash.com/photo-1603064752734-4c48eff53d05?auto=format&fit=crop&w=800&q=80"},
+        {name:"Cheese Burger",desc:"Cheese, Provoloni, Lettuce, Tomato, Onion, Mayonnaise",price:500,img:"https://images.unsplash.com/photo-1571091718767-18b5b1457add?auto=format&fit=crop&w=800&q=80"},
+        {name:"Double Burger",desc:"Double Meat, Beef, Provoloni, Cheese, Mayonnaise, Onion, Tomato, Lettuce",price:700,img:"https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?auto=format&fit=crop&w=800&q=80"}
+      ]
+    },
+    {
+      id:"breakfast",eyebrow:"Morning Start",title:"Breakfast",type:"cards",
+      items:[
+        {name:"Special FORNO Omelet",desc:"Egg, Beef, Olive oil, Cheese, Tomato, Green pepper",price:500},
+        {name:"Cheese Omelet",desc:"Egg, Olive oil, Cheese, Beef, Tosign, Black pepper",price:600},
+        {name:"French Toast",desc:"Egg, Honey, Milk, Butter",price:700},
+        {name:"Egg Scrambled",desc:"Egg, Green pepper, Oil, Tomato",price:500},
+        {name:"Special Chechebsa",desc:"Flour, Egg, Honey, Butter",price:500},
+        {name:"Fasting Chechebsa",desc:"Flour, Butter, Honey",price:300}
+      ]
+    },
+    {
+      id:"sandwich",eyebrow:"Fresh & Stacked",title:"Sandwich",type:"cards",
+      items:[
+        {name:"Club Sandwich",desc:"Egg, Chicken, Tomato, Mayonnaise, Lettuce, Onion, Provoloni, Cheese, Green pepper, Black pepper",price:500},
+        {name:"Steak Sandwich",desc:"Meat, Mayonnaise, Green pepper, Onion, Cheese",price:900},
+        {name:"Chicken Sandwich",desc:"Chicken, Mayonnaise, Onion, Tomato, Lettuce, Green pepper",price:600},
+        {name:"Tuna Sandwich",desc:"Tuna, Onion, Tomato, Lettuce, Cheese, Green pepper",price:500},
+        {name:"Egg Chicken Sandwich",desc:"Egg, Chicken, Tomato, Mayonnaise, Lettuce, Onion, Provoloni, Cheese, Green pepper, Black pepper",price:500}
+      ]
+    },
+    {
+      id:"juice",eyebrow:"Cold & Fresh",title:"Juice",type:"compact",badge:"&#129380; Cold Pressed",
+      items:[
+        {name:"Special Juice",price:300,img:"https://images.unsplash.com/photo-1568909344668-6f14a07b56a0?auto=format&fit=crop&w=800&q=80"},
+        {name:"Avocado Juice",price:200,img:"https://images.unsplash.com/photo-1603569283847-aa295f0d016a?auto=format&fit=crop&w=800&q=80"},
+        {name:"Pineapple Juice",price:180,img:"https://images.unsplash.com/photo-1534353473418-4cfa6c56fd38?auto=format&fit=crop&w=800&q=80"},
+        {name:"Strawberry Juice",price:210,img:"https://images.unsplash.com/photo-1614707585284-9cb9fc018387?auto=format&fit=crop&w=800&q=80"},
+        {name:"Mango Juice",price:200,img:"https://images.unsplash.com/photo-1546173159-315724a31696?auto=format&fit=crop&w=800&q=80"},
+        {name:"Papaya Juice",price:180,img:"https://images.unsplash.com/photo-1525385133512-2f3bdd039054?auto=format&fit=crop&w=800&q=80"},
+        {name:"Spris Juice",price:220,img:"https://images.unsplash.com/photo-1506802913710-40e2e66339c9?auto=format&fit=crop&w=800&q=80"},
+        {name:"Smoothie Juice",price:270,img:"https://images.unsplash.com/photo-1615478503562-ec2d8aa0e24e?auto=format&fit=crop&w=800&q=80"}
+      ]
+    },
+    {
+      id:"mojito",eyebrow:"Non-Alcoholic",title:"Mojito",type:"compact",badge:"&#127817; Refreshing",
+      items:[
+        {name:"Pineapple Mojito",price:300,img:"https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=800&q=80"},
+        {name:"Strawberry Mojito",price:300,img:"https://images.unsplash.com/photo-1507120366498-4656eaece7fa?auto=format&fit=crop&w=800&q=80"},
+        {name:"Cinnamon Mojito",price:300,img:"https://images.unsplash.com/photo-1618724980108-a4d3856fd8f5?auto=format&fit=crop&w=800&q=80"}
+      ]
+    },
+    {
+      id:"hot",eyebrow:"Warm & Cozy",title:"Hot Drinks",type:"compact",
+      banner:"https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=1200&q=80",
+      items:[
+        {name:"Coffee",price:90},{name:"Americano",price:90},{name:"Tea",price:50},
+        {name:"Special Tea",price:130},{name:"Orange Tea",price:100},{name:"Lemon Tea",price:100},
+        {name:"Pineapple Tea",price:100},{name:"Peanut Tea",price:100},
+        {name:"Macchiato",price:100},{name:"Cappuccino",price:150},{name:"Latte",price:150},
+        {name:"Hot Chocolate",price:150},{name:"Milk",price:110},{name:"Qeshir",price:60},{name:"Spris",price:90}
+      ]
+    },
+    {
+      id:"beverages",eyebrow:"Cold Bottles",title:"Beverages",type:"compact",
+      items:[
+        {name:"Soft Drinks (Coca-Cola, Fanta, Mirinda, Sprite, Pepsi)",price:100},
+        {name:"Water \u2014 \u00bd Litre",price:40},{name:"Water \u2014 1 Litre",price:60}
+      ]
+    },
+    {
+      id:"extra",eyebrow:"Add-Ons",title:"Extras",type:"compact",
+      items:[
+        {name:"Mayonnaise",price:100},{name:"Cheese",price:100},
+        {name:"Olive Oil",price:50},{name:"Mushroom",price:50},
+        {name:"Tuna",price:80},{name:"Beef Slice",price:80},
+        {name:"Dried Slice",price:80},{name:"Cheese Slice",price:80},
+        {name:"Mozzarella",price:80},{name:"Ketchup",price:50}
+      ]
+    }
+  ],
+  packaging:[
+    {name:"Pizza Box",price:60},{name:"Foil",price:40},
+    {name:"Juice Cup",price:30},{name:"Coffee Cup",price:30}
+  ]
+};
+// %%FORNO_DATA_END%%
+
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+let uTimer=null;
+function scheduleUpdate(){clearTimeout(uTimer);uTimer=setTimeout(doUpdate,280)}
+
+function buildSiteHTML(){
+  const navLinks=MENU.sections.map(s=>`<a href="#${s.id}">${esc(s.title)}</a>`).join('');
+  const mobLinks=MENU.sections.map(s=>`<a href="#${s.id}" onclick="closeMob()">${esc(s.title)}</a>`).join('');
+  const sections=MENU.sections.map(buildSection).join('');
+  const pills=MENU.packaging.map(p=>`<div class="pill">${esc(p.name)} <span class="p">\u2014 ${p.price} ETB</span></div>`).join('');
+  return `
+  <nav><div class="nav-inner">
+    <a href="#top" class="nav-brand">FORNO<em>.</em></a>
+    <div class="nav-links">${navLinks}</div>
+    <a href="tel:${esc(MENU.phone)}" class="nav-call">&#128222; Order Now</a>
+    <button class="ham" id="ham-btn" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div></nav>
+  <div class="mob-nav" id="mob">${mobLinks}<a href="tel:${esc(MENU.phone)}" class="call-link">&#128222; ${esc(MENU.phone)}</a></div>
+  <section class="hero" id="top">
+    <div class="hero-bg"></div>
+    <div class="flame-wrap">
+      <svg class="flame-svg" viewBox="0 0 250 195" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="gO" cx="50%" cy="80%" r="50%"><stop offset="0%" stop-color="#FF5E00"/><stop offset="55%" stop-color="#BF1212"/><stop offset="100%" stop-color="#7A0000" stop-opacity="0"/></radialGradient>
+          <radialGradient id="gM" cx="50%" cy="80%" r="50%"><stop offset="0%" stop-color="#FFA000"/><stop offset="50%" stop-color="#FF4D00"/><stop offset="100%" stop-color="#BF1212" stop-opacity="0"/></radialGradient>
+          <radialGradient id="gI" cx="50%" cy="80%" r="50%"><stop offset="0%" stop-color="#FFF8E0"/><stop offset="35%" stop-color="#FFD900"/><stop offset="100%" stop-color="#FF8A00" stop-opacity="0"/></radialGradient>
+        </defs>
+        <path d="M18 195 Q18 62 125 44 Q232 62 232 195Z" fill="#1E0900" opacity=".75"/>
+        <rect x="6"   y="174" width="26" height="19" rx="1" fill="#461A00" opacity=".85"/>
+        <rect x="34"  y="174" width="26" height="19" rx="1" fill="#3A1400" opacity=".85"/>
+        <rect x="62"  y="174" width="26" height="19" rx="1" fill="#461A00" opacity=".85"/>
+        <rect x="90"  y="174" width="26" height="19" rx="1" fill="#3A1400" opacity=".85"/>
+        <rect x="118" y="174" width="26" height="19" rx="1" fill="#461A00" opacity=".85"/>
+        <rect x="146" y="174" width="26" height="19" rx="1" fill="#3A1400" opacity=".85"/>
+        <rect x="174" y="174" width="26" height="19" rx="1" fill="#461A00" opacity=".85"/>
+        <rect x="202" y="174" width="26" height="19" rx="1" fill="#3A1400" opacity=".85"/>
+        <path d="M28 195 Q28 72 125 55 Q222 72 222 195" stroke="#7A3A00" stroke-width="1.5" fill="none" opacity=".5"/>
+        <ellipse cx="125" cy="160" rx="55" ry="22" fill="#FF2800" opacity=".1"/>
+        <g class="fl-o"><ellipse cx="125" cy="112" rx="40" ry="55" fill="url(#gO)" opacity=".88"/></g>
+        <g class="fl-m"><ellipse cx="125" cy="122" rx="25" ry="40" fill="url(#gM)"/></g>
+        <g class="fl-i"><ellipse cx="125" cy="133" rx="13" ry="25" fill="url(#gI)"/></g>
+        <circle class="sp" cx="107" cy="90"  r="2.5" fill="#FF8A00" opacity=".85"/>
+        <circle class="sp" cx="145" cy="85"  r="2"   fill="#FFD000" opacity=".75"/>
+        <circle class="sp" cx="120" cy="76"  r="1.5" fill="#FF5E00" opacity=".6"/>
+      </svg>
+    </div>
+    <div class="hero-body">
+      <p class="hero-eye">Pizza &amp; Burger House</p>
+      <h1 class="hero-name">FORNO</h1>
+      <p class="hero-sub">&mdash; Oven Fired. Burger Inspired. &mdash;</p>
+      <p class="hero-tag">Fresh &middot; Hot &middot; Made to Order</p>
+      <a href="tel:${esc(MENU.phone)}" class="hero-cta"><span class="live"></span>We Deliver &mdash; ${esc(MENU.phone)}</a>
+    </div>
+    <div class="scroll-hint"><span class="sh-lbl">Menu</span><div class="sh-line"></div></div>
+  </section>
+  <main class="content">
+    ${sections}
+    <div class="deliver msec">
+      <p class="deliver-eye">Delivery &amp; Takeaway</p>
+      <h2 class="deliver-h">Order Now</h2>
+      <div class="deliver-num">&#128222; ${esc(MENU.phone)}</div>
+      <p style="font-family:'Oswald',sans-serif;font-size:.65rem;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;">Packaging &amp; Containers</p>
+      <div class="pills-wrap">${pills}</div>
+    </div>
+  </main>
+  <footer>
+    <div class="foot-logo">FORNO<em>.</em></div>
+    <p class="foot-sub">Pizza &amp; Burger House</p>
+    <p class="foot-tag">Taste the Difference. Every Time.</p>
+    <p class="foot-copy">&copy; ${new Date().getFullYear()} Forno Pizza &amp; Burger House</p>
+  </footer>`;
+}
+
+function buildSection(s){
+  const hasImgs=s.items.some(i=>i.img);
+  const useCards=s.type==='cards'||hasImgs;
+  const gc=useCards?'grid-cards':'grid-compact';
+  const banner=s.banner?`<div class="sec-banner"><img src="${esc(s.banner)}" alt="${esc(s.title)}" loading="lazy" onerror="this.parentNode.style.display='none'"></div>`:'';
+  const items=s.items.map(i=>useCards?buildCard(i,s.badge):buildCompact(i)).join('');
+  return `<section class="msec" id="${s.id}">
+    <div class="sec-head"><div><p class="sec-lbl">${esc(s.eyebrow)}</p><h2>${esc(s.title)}<em>.</em></h2></div><div class="sec-rule"></div></div>
+    ${banner}
+    <div class="${gc}">${items}</div>
+  </section>`;
+}
+
+function buildCard(item,badge){
+  if(item.img){
+    return `<div class="card has-img">
+      <div class="card-img-wrap">
+        <img class="card-img" src="${esc(item.img)}" alt="${esc(item.name)}" loading="lazy" onerror="this.style.display='none';this.parentNode.style.background='#271000'">
+        ${badge?`<span class="img-badge">${badge}</span>`:''}
+      </div>
+      <div class="card-body">
+        <div class="card-top"><span class="card-name">${esc(item.name)}</span><span class="card-price">${item.price} ETB</span></div>
+        ${item.desc?`<p class="card-desc">${esc(item.desc)}</p>`:''}
+      </div>
+    </div>`;
+  }
+  return `<div class="card">
+    <div class="card-top"><span class="card-name">${esc(item.name)}</span><span class="card-price">${item.price} ETB</span></div>
+    ${item.desc?`<p class="card-desc">${esc(item.desc)}</p>`:''}
+  </div>`;
+}
+
+function buildCompact(item){
+  return `<div class="card"><span class="card-name">${esc(item.name)}</span><span class="card-price">${item.price} ETB</span></div>`;
+}
+
+function initSite(){
+  document.getElementById('site-root').innerHTML=buildSiteHTML();
+  document.getElementById('ham-btn').onclick=()=>document.getElementById('mob').classList.toggle('open');
+  const btt=document.getElementById('btt');
+  window.addEventListener('scroll',()=>btt.classList.toggle('show',scrollY>600));
+  startObs();
+}
+function closeMob(){document.getElementById('mob')?.classList.remove('open')}
+function startObs(){
+  const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target)}}),{threshold:.06,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.msec').forEach(el=>{if(el.getBoundingClientRect().bottom<window.innerHeight)el.classList.add('vis');else obs.observe(el)});
+}
+function doUpdate(){
+  const sy=window.scrollY;
+  document.getElementById('site-root').innerHTML=buildSiteHTML();
+  document.getElementById('ham-btn').onclick=()=>document.getElementById('mob').classList.toggle('open');
+  window.scrollTo(0,sy);startObs();
+}
+
+/* EDITOR */
+function openEP(){document.getElementById('ep-overlay').classList.add('open');document.getElementById('ep-panel').classList.add('open');renderEP()}
+function closeEP(){document.getElementById('ep-overlay').classList.remove('open');document.getElementById('ep-panel').classList.remove('open')}
+
+function renderEP(){
+  let h='';
+  h+=`<div class="fg"><div class="fg-label">&#128222; Phone Number</div>
+    <div class="ef"><label>Delivery &amp; Order Number</label>
+      <input type="tel" value="${esc(MENU.phone)}" oninput="MENU.phone=this.value;scheduleUpdate()">
+    </div></div>`;
+  h+=`<div class="fg"><div class="fg-label">&#128230; Takeaway Packaging</div>`;
+  MENU.packaging.forEach((p,i)=>{
+    h+=`<div class="ep-item"><div class="ep-item-hd"><span class="ep-item-n">Item ${i+1}</span><button class="ep-del" onclick="delPkg(${i})">&#10005;</button></div>
+      <div class="ef"><label>Name</label><input type="text" value="${esc(p.name)}" oninput="MENU.packaging[${i}].name=this.value;scheduleUpdate()"></div>
+      <div class="ef"><label>Price</label><div class="price-row"><input type="number" min="0" value="${p.price}" oninput="MENU.packaging[${i}].price=+this.value;scheduleUpdate()"><span class="etb-tag">ETB</span></div></div>
+    </div>`;
+  });
+  h+=`<button class="ep-add" onclick="addPkg()">&#65291; Add Packaging Item</button></div>`;
+  MENU.sections.forEach((s,si)=>{
+    h+=`<div class="ep-sec" id="eps-${s.id}">
+      <button class="ep-sec-hd" onclick="toggleSec('${s.id}')">
+        <span class="ep-sec-name">${esc(s.title)}</span>
+        <span class="ep-sec-meta"><span class="ep-sec-ct">${s.items.length} items</span><span class="ep-chev">&#9660;</span></span>
+      </button>
+      <div class="ep-sec-body">`;
+    if('banner' in s){
+      h+=`<div class="ep-item" style="margin-top:.55rem"><div class="fg-label" style="margin-bottom:.35rem">&#127775; Section Banner Photo URL</div>
+        <div class="ef"><input type="url" value="${esc(s.banner||'')}" placeholder="https://images.unsplash.com/..." oninput="MENU.sections[${si}].banner=this.value;scheduleUpdate()">
+        <p class="img-note">&#128247; The wide banner photo shown above the item list for this section.</p></div>
+      </div>`;
+    }
+    s.items.forEach((item,ii)=>{
+      h+=`<div class="ep-item"><div class="ep-item-hd"><span class="ep-item-n">Item ${ii+1}</span><button class="ep-del" onclick="delItem(${si},${ii})">&#10005;</button></div>
+        <div class="ef"><label>Item Name</label><input type="text" value="${esc(item.name)}" oninput="MENU.sections[${si}].items[${ii}].name=this.value;scheduleUpdate()"></div>
+        ${s.type==='cards'?`<div class="ef"><label>Description / Ingredients</label><textarea rows="2" oninput="MENU.sections[${si}].items[${ii}].desc=this.value;scheduleUpdate()">${esc(item.desc||'')}</textarea></div>`:''}
+        <div class="ef"><label>Price</label><div class="price-row"><input type="number" min="0" value="${item.price}" oninput="MENU.sections[${si}].items[${ii}].price=+this.value;scheduleUpdate()"><span class="etb-tag">ETB</span></div></div>
+        ${'img' in item?`<div class="ef"><label>Photo URL</label><input type="url" value="${esc(item.img||'')}" placeholder="https://..." oninput="MENU.sections[${si}].items[${ii}].img=this.value;scheduleUpdate()"><p class="img-note">&#128247; Paste any image link. Leave blank for no photo.</p></div>`:''}
+      </div>`;
+    });
+    h+=`<button class="ep-add" onclick="addItem(${si})">&#65291; Add ${esc(s.title)} Item</button></div></div>`;
+  });
+  document.getElementById('ep-body').innerHTML=h;
+}
+
+function toggleSec(id){document.getElementById('eps-'+id)?.classList.toggle('open')}
+function addItem(si){
+  const s=MENU.sections[si];
+  s.items.push({name:'New Item',desc:s.type==='cards'?'Add description here':'',price:0});
+  renderEP();scheduleUpdate();
+  const el=document.getElementById('eps-'+s.id);
+  if(el){el.classList.add('open');el.scrollIntoView({behavior:'smooth',block:'nearest'})}
+}
+function delItem(si,ii){
+  if(!confirm(`Remove "${MENU.sections[si].items[ii].name}"?`))return;
+  MENU.sections[si].items.splice(ii,1);renderEP();scheduleUpdate();
+  document.getElementById('eps-'+MENU.sections[si].id)?.classList.add('open');
+}
+function addPkg(){MENU.packaging.push({name:'New Item',price:0});renderEP();scheduleUpdate()}
+function delPkg(i){if(!confirm(`Remove "${MENU.packaging[i].name}"?`))return;MENU.packaging.splice(i,1);renderEP();scheduleUpdate()}
+
+/* SAVE */
+function saveDownload(){
+  closeEP();
+  setTimeout(()=>{
+    const sr=document.getElementById('site-root'),eb=document.getElementById('ep-body');
+    const srB=sr.innerHTML,ebB=eb.innerHTML;
+    sr.innerHTML='';eb.innerHTML='';
+    let html='<!DOCTYPE html>\n'+document.documentElement.outerHTML;
+    sr.innerHTML=srB;eb.innerHTML=ebB;
+    const nd='let MENU = '+JSON.stringify(MENU,null,2)+';';
+    html=html.replace(/\/\/ %%FORNO_DATA_START%%[\s\S]*?\/\/ %%FORNO_DATA_END%%/,'// %%FORNO_DATA_START%%\n'+nd+'\n// %%FORNO_DATA_END%%');
+    const blob=new Blob([html],{type:'text/html;charset=utf-8'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='forno-website.html';
+    document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(a.href);
+    showToast();
+  },350);
+}
+function showToast(){const t=document.getElementById('ep-toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
+
+initSite();
+</script>
+</body>
+</html>
